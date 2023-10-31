@@ -1,5 +1,5 @@
 import face_recognition
-import os,sys
+import os
 import cv2
 import numpy as np
 import math
@@ -14,8 +14,6 @@ def face_confidence(face_distance, face_match_threshold=0.6):
         if 0 <= linear_val <= 1.0:
             value = (linear_val + ((1.0 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2)))
             return str(round(value, 2)) + '%'
-      
-
 
 class FaceRecognition:
     def __init__(self):
@@ -27,10 +25,11 @@ class FaceRecognition:
     def encode_faces(self):
         for image in os.listdir('faces'):
             face = face_recognition.load_image_file("faces/" + image)
-            encoding = face_recognition.face_encodings(face)[0]
-            encoding = encoding.astype(np.float64)  # Convert the data type to float64
-            self.known_face_encodings.append(encoding)
-            self.known_face_names.append(image)
+            encoding = face_recognition.face_encodings(face)
+            if len(encoding) > 0:
+                encoding = encoding[0].astype(np.float64)  # Convert the data type to float64
+                self.known_face_encodings.append(encoding)
+                self.known_face_names.append(image)
 
     def run_recognition(self):
         video_capture = cv2.VideoCapture(0)
