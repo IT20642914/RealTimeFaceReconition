@@ -43,30 +43,27 @@ class FaceRecognition:
             self.face_names = []
 
             for face_encoding in self.face_encodings:
-                matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding,0.6)
+                matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, 0.6)
+
                 name = 'Unknown'
                 confidence = 'Unknown'
 
                 face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
-                best_match_index = np.argmin(face_distances)
 
-                if matches[best_match_index]:
+                if True in matches:
+                    best_match_index = matches.index(True)
                     name = self.known_face_names[best_match_index]
                     confidence = face_confidence(face_distances[best_match_index])
 
-                    self.face_names.append(f'{name} ({confidence})')
-                         # find All faces in the current frame
-                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                    faces = face_classifier.detectMultiScale(gray, 1.3, 5)
-                    if len(faces) == 0:
-                        return frame
+                self.face_names.append(f'{name} ({confidence})')
 
-                    for (x, y, w, h) in faces:
-                        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-    
-                        cv2.putText(frame, name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
-                    return frame
-                    
+            # Draw rectangles and labels on the frame for all detected faces
+            for (top, right, bottom, left), name in zip(self.face_locations, self.face_names):
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+
+            return frame
+
         self.process_current_frame = not self.process_current_frame
 
 
