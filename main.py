@@ -4,7 +4,8 @@ import face_recognition
 import numpy as np
 import math
 
-face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
+
+
 
 def face_confidence(face_distance, face_match_threshold=0.6):
     range = (1.0 - face_match_threshold)
