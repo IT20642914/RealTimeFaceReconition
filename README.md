@@ -7,7 +7,9 @@ python -m venv env
 
  env\Scripts\activate   
  cmake --version 
-
- pip install opencv-python 
- pip install face_recognition
-  
+ python -m venv env   
+ env\Scripts\activate     
+ pip install face_recognition   
+ pip install  dlib   
+ pip install opencv-python                            
+ pip install cmake
